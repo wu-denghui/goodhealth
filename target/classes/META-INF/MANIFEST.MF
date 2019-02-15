@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: goodhealth
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: 24663
+Implementation-Vendor-Id: cn.com
+Build-Jdk: 1.8.0_144
+Implementation-URL: http://projects.spring.io/spring-boot/goodhealth/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
