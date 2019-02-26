@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core"   prefix="c"%>
 <html>
 <head><jsp:include  page="/goodhealth/head.jsp"></jsp:include>
+<script type="text/javascript"  src="/js/jquery.js"></script>
 <title>登录页面</title>
 </head>
 <body  >
@@ -23,7 +24,9 @@
 <input type="reset" name="button" id="button" value="重置" />
 </div>
 <script type="text/javascript">
-     document
+$(document).ready(function(){
+	$("#ln").focus();
+});
 	</script>
 </form>
 </body>

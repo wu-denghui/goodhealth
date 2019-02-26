@@ -52,7 +52,7 @@ public class OrderTest {
 	
 	@Test
 	public  void   testFind(){
-		this.orderRepository.findByOrderId(1);
+		this.orderRepository.findByOrderId("1");
 	}
 	
 

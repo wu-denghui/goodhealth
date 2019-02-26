@@ -12,9 +12,9 @@ import com.goodhealth.pojo.Orders;
  * @date 2019年1月4日
  * @Description
  */
-public interface OrderRepository extends  JpaRepository<Orders, Integer>
+public interface OrderRepository extends  JpaRepository<Orders, String>
 ,JpaSpecificationExecutor<Orders>{
 
-	Orders  findByOrderId(int  id);
+	Orders  findByOrderId(String  id);
 	
 }

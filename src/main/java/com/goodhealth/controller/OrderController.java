@@ -7,6 +7,7 @@ package com.goodhealth.controller;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,9 +22,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.goodhealth.pojo.Member;
+import com.goodhealth.pojo.OrderItem;
 import com.goodhealth.pojo.Orders;
 import com.goodhealth.pojo.Shoppingcar;
 import com.goodhealth.service.imp.MemberServiceImp;
+import com.goodhealth.service.imp.OrderItemServiceImp;
 import com.goodhealth.service.imp.OrderServiceImp;
 import com.goodhealth.service.imp.ShoppingCarServiceImp;
 
@@ -41,6 +44,10 @@ public class OrderController {
 	
 	@Autowired
 	private MemberServiceImp memberService;
+	
+	@Autowired
+	private OrderItemServiceImp   orderItemServic;
+	
 
 	@Autowired
 	private ShoppingCarServiceImp shoppingCarService;
@@ -53,7 +60,10 @@ public class OrderController {
 		order.setMemberId(((Member)request.getSession(true).getAttribute("member")).getMemberId());
          java.util.Date  date=new  java.util.Date();
      	SimpleDateFormat  sdf=new  SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+     	SimpleDateFormat  oDateFormat=new  SimpleDateFormat("yyyyMMddHHmmss");
      	String  time=sdf.format(date);
+     	double  a=Math.floor(Math.random()*100);
+     	String  orderId=oDateFormat.format(date)+String.valueOf(a);
      	order.setOrderDate(time);
 		try {
 			int  sum=0;
@@ -62,10 +72,26 @@ public class OrderController {
 			Shoppingcar record ;
 			int  recordCount;
 			int  prize;
+			double  b;
+			OrderItem item;
+			Date da;
+			String  itemId;
 			StringBuffer  sBuffer = new StringBuffer();
 			for (int i = 0; i < id.length; i++) {
-				 recordId = Integer.parseInt(id[i]);
+				recordId = Integer.parseInt(id[i]);
+				System.out.println(recordId);
 				record = this.shoppingCarService.getShoppingCarById(recordId);
+		     	item=new  OrderItem();
+		     	da=new Date();
+		     	b=Math.floor(Math.random()*100);
+		     	itemId=oDateFormat.format(da)+String.valueOf(b);
+		     	System.out.println(itemId);
+				item.setId(itemId);
+				item.setDrugId(record.getDrug().getDrugId());
+				item.setNum(record.getRecordNumber());
+				System.out.println(orderId);
+				item.setOrderId(orderId);
+				this.orderItemServic.saveItem(item);
 				recordCount=(record.getRecordNumber())*(record.getDrug().getDrugPrice().intValue());
 				prize=(record.getRecordNumber())*(record.getDrug().getDrugIntegral());
 			   sBuffer.append( record.getDrug().getDrugName()+"*"+record.getRecordNumber());
@@ -74,6 +100,7 @@ public class OrderController {
 				prizesum+=prize;
 				this.shoppingCarService.deleteShoppingCar(recordId);
 			}
+			order.setOrderId(orderId);
 			order.setOrderCount(new  BigDecimal(sum));
 			order.setOrderAward(prizesum);
 			order.setOrderDetail(sBuffer.toString());
@@ -92,21 +119,31 @@ public class OrderController {
 		order.setMemberId(((Member)request.getSession(true).getAttribute("member")).getMemberId());
          java.util.Date  date=new  java.util.Date();
      	SimpleDateFormat  sdf=new  SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+     	SimpleDateFormat  oDateFormat=new  SimpleDateFormat("yyyyMMddHHmmss");
      	String  time=sdf.format(date);
+     	String  itemId=oDateFormat.format(date)+String.valueOf(Math.floor(Math.random()*100));
+     	String  orderId=oDateFormat.format(date)+String.valueOf(Math.floor(Math.random()*100));
      	order.setOrderDate(time);
+     	OrderItem item=new  OrderItem();
 		try {
 			StringBuffer  sBuffer = new StringBuffer();
 			Shoppingcar  record = this.shoppingCarService.getShoppingCarById(id);
+			item.setId(itemId);
+			item.setDrugId(record.getDrug().getDrugId());
+			item.setNum(record.getRecordNumber());
+			item.setOrderId(orderId);
 		    int recordCount=(record.getRecordNumber())*(record.getDrug().getDrugPrice().intValue());
 			int prize=(record.getRecordNumber())*(record.getDrug().getDrugIntegral());
 		    sBuffer.append( record.getDrug().getDrugName()+"*"+record.getRecordNumber());
 			sBuffer.append("\r\n"); 
 			this.shoppingCarService.deleteShoppingCar(id);
+			order.setOrderId(orderId);
 			order.setOrderCount(new  BigDecimal(recordCount));
 			order.setOrderAward(prize);
 			order.setOrderDetail(sBuffer.toString());
 			order.setOrderStatus(0);
 			this.orderService.addOrder(order);
+			this.orderItemServic.saveItem(item);
 			success(request, response, form,size,1);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -115,7 +152,7 @@ public class OrderController {
 	}
 	
 	@RequestMapping("/payOrder/{id}")
-	public   String  payOrder(HttpServletRequest  request ,HttpServletResponse response,Model  model, @PathVariable(value="id")int  id){
+	public   String  payOrder(HttpServletRequest  request ,HttpServletResponse response,Model  model, @PathVariable(value="id")String  id){
 		Orders  orders;
 			try {
 				orders=this.orderService.findOrderById(id);
@@ -161,7 +198,7 @@ public class OrderController {
 	
 	@RequestMapping("/pay")
 	public   String  pay(HttpServletRequest  request ,HttpServletResponse response,Model  model, 
-			int  id,@Validated(value={ValidGroup1.class}) Orders od,BindingResult  result){
+			String  id,@Validated(value={ValidGroup1.class}) Orders od,BindingResult  result){
 		// 获取校验错误信息
 		if (result.hasErrors()) {
 			// 输出错误信息
@@ -332,6 +369,7 @@ public class OrderController {
 			out.close();
 		}
 	}
+	
 	
 	public void success(HttpServletRequest request, HttpServletResponse response,int i,int size,int reduce) {
 		response.setContentType("text/html;charset=UTF-8");

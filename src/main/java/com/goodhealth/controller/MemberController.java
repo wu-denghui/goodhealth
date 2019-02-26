@@ -173,7 +173,7 @@ public class MemberController {
 			needLoginFail(request, response);
 		}
 		if (member.getMemberStatus()==1) {
-			return  "Manger/adminManger";
+			return  "Manger/login";
 		}else{
 			model.addAttribute("member", member);
 			return  "Manger/MManger";

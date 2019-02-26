@@ -69,10 +69,11 @@ function showtime() {
 	var hours = now.getHours();
 	var minutes = now.getMinutes();
 	var seconds = now.getSeconds();
-	var timeValue = "" + ((hours >= 12) ? "下午 " : "上午 ");
-	timeValue += ((hours > 12) ? hours - 12 : hours);
-	timeValue += ((minutes < 10) ? ":0" : ":") + minutes;
-	timeValue += ((seconds < 10) ? ":0" : ":") + seconds;
+	var timeValue = "" + ((hours >= 12) ? "下午 " : "上午 ")
+	timeValue += ((hours > 12) ? hours - 12 : hours)
+	timeValue += ((minutes < 10) ? ":0" : ":") + minutes
+	timeValue += ((seconds < 10) ? ":0" : ":") + seconds
+	document.clock.thetime.value = timeValue;
 	document.getElementById("thetime").value=timeValue;
 	timerID = setTimeout("showtime()", 1000);
 	timerRunning = true;

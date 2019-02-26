@@ -8,13 +8,27 @@
 <jsp:include page="/goodhealth/head.jsp"></jsp:include>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>我的购物车</title>
+<script type="text/javascript"  src="/js/jquery.js"></script>
+<script type="text/javascript">
+$(function(){
+	    $("#del").click(function(){
+	     var cks=$("input[name='intoOrder']:checkbox:checked");
+	     if (cks.length>0){
+	      $("#myform").submit();
+	      return true;
+	     }else{
+	      alert("请先勾选!");
+	      return false;
+	     }
+	    });
+	   });
+</script>
 </head>
 <body>
 	<div align="center">
-		<form
-			action="${pageContext.request.contextPath }/order/generateOrderMany">
-			<input type="hidden" name="form" value="${index }"> <input
-				type="hidden" name="size" value="${size}">
+		<form   id="myform"  action="${pageContext.request.contextPath }/order/generateOrderMany">
+			<input type="hidden" name="form" value="${index }">
+			 <input type="hidden" name="size" value="${size}">
 			<c:choose>
 				<c:when test="${empty  recordList }">
 					<h2>您的购物车为空</h2>
@@ -69,17 +83,17 @@
 									<c:param name="id" value="${record.recordId}"></c:param>
 								</c:url>
 								<td><a href="${linkC}"><font color="red">生成订单</font></a></td>
-								<td><input type="checkbox" name="intoOrder"
-									value="${record.recordId }"></td>
+								<td><input type="checkbox" name="intoOrder" value="${record.recordId }"></td>
 							</tr>
 						</c:forEach>
 					</table>
 				</c:otherwise>
 			</c:choose>
 			<c:if test="${not  empty  recordList }">
-				<input type="submit" value="批量生成订单" width="50" height="30">
-				<label for="ss"><input id="ss" name="all" type="checkbox"
-					onclick="sall(this)">全选</label>&nbsp;&nbsp;&nbsp;&nbsp;
+				<!-- <input type="submit" value="批量生成订单" width="50" height="30" > -->
+				<a href="javascript:void(0)" id="del">批量生成订单</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<label for="ss"><input id="ss" name="all" type="checkbox" onclick="sall(this)">全选</label>
 				<script type="text/javascript">
 					function sall(obj) {
 						var arr = document.getElementsByName("intoOrder");
@@ -87,7 +101,6 @@
 							arr[i].checked = obj.checked;
 						}
 					}
-					
 					var boo=undefined;
 					var pheight,pwidth;
 					var enlarge=function(o){

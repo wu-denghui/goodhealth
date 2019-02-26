@@ -23,6 +23,6 @@ public interface OrderService {
 	  
 	  Page< Orders> findOnesCompletedOrder(Member  member,int index)throws Exception;
 	  
-	  Orders  findOrderById(int  id)throws  Exception;
+	  Orders  findOrderById(String  id)throws  Exception;
 	
 }

@@ -91,7 +91,7 @@ public class PrizeController {
 
 	@RequestMapping("/exchange")
 	public String exchange(HttpServletRequest request, HttpServletResponse response, 
-		String name,	int value, int from,Model  model,int orderId) {
+		String name,	int value, int from,Model  model,String orderId) {
 		Member member = (Member) request.getSession(true).getAttribute("member");
 		int old = member.getMemberIntegral();
 		try {
@@ -113,7 +113,7 @@ public class PrizeController {
 
 
 
-	public void exchangeSuccess(HttpServletRequest request, HttpServletResponse response, int i) {
+	public void exchangeSuccess(HttpServletRequest request, HttpServletResponse response, String i) {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = null;
 		try {

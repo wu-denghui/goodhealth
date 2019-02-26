@@ -17,12 +17,11 @@ public class Orders implements Serializable {
 
 	@Id
 	@Column(name="order_id")
-	private int orderId;
+	private String orderId;
 
 	@Column(name="member_id")
 	private int memberId;
 
-	
 	@Column(name="order_address")
 	@NotBlank(message="联系地址不能为空",groups={ValidGroup1.class})
 	private String orderAddress;
@@ -74,11 +73,11 @@ public class Orders implements Serializable {
 	}
 	
 	
-	public int getOrderId() {
+	public String getOrderId() {
 		return this.orderId;
 	}
 
-	public void setOrderId(int orderId) {
+	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
 

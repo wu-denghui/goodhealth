@@ -63,7 +63,7 @@ public class OrderServiceImp implements OrderService {
 	 * @see com.goodhealth.service.OrderService#findOrderById(int)
 	 */
 	@Override
-	public Orders findOrderById(int id) throws Exception {
+	public Orders findOrderById(String id) throws Exception {
 		Orders  orders=this.orderRepository.findByOrderId(id);
 		return orders;
 	}

@@ -4,6 +4,7 @@
 <HTML>
 <HEAD>
 <jsp:include page="/goodhealth/head.jsp"></jsp:include>
+<script type="text/javascript"  src="/js/jquery.js"></script>
 <title>注册页面</title>
 	<style type="text/css">
 		.status1{
@@ -171,6 +172,10 @@
 		},dj);
 		return boo;
 	}
+	
+	$(document).ready(function(){
+		$("#ln").focus();
+	});
 	</script>
 </Body>
 </HTML>
